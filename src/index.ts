@@ -16,49 +16,50 @@ app.get("/ping", (req: Request, res: Response) => {
     res.send("Pong!")
 })
 
+// Busca todas as contas
 app.get("/accounts", (req: Request, res: Response) => {
     res.send(accounts)
 })
 
-/* app.get("/accounts/:id", (req: Request, res: Response) => {
+// Busca conta por ID
+app.get("/accounts/:id", (req: Request, res: Response) => {
     const idToFind = req.params.id
 
     const result = accounts.find((account) => account.id === idToFind)
     res.status(200).send(result)
 })
 
-app.get("/accounts/:id", (req: Request, res: Response) => {
+// Busca conta por ID para deletar
+app.delete("/accounts/:id", (req: Request, res: Response) => {
     const idToDelete = req.params.id
 
     const accountIndex = accounts.findIndex((account) => {
         account.id === idToDelete
     })
 
-    if (accountIndex >= 0) {
-        accounts.splice(accountIndex, 1)
-    }
-
-    res.status(200).send("Item deletado com sucesso!")
+    accountIndex < 0 ? res.status(404).send("Conta não encontrada") : accounts.splice(accountIndex, 1) && res.status(200).send("Item deletado com sucesso!")
 })
- */
-app.put("/accounts/:id", (req:Request, res:Response) => {
-    const idToEdit = req.params.id;
+
+app.put("/accounts/:id", (req: Request, res: Response) => {
+    const { id } = req.params;
 
     const newId = req.body.id as string | undefined
     const newOwnerName = req.body.name as string | undefined
     const newBalance = req.body.balance as number | undefined
     const newType = req.body.type as ACCOUNT_TYPE | undefined
-    
-    const account = accounts.find((account) => {
-      return account.id === idToEdit
+
+    const accountFound = accounts.find((account) => {
+        return account.id === id
     })
 
-    if (account) {
-        account.id = newId || account.id
-        account.ownerName = newOwnerName || account.ownerName
-        account.balance = isNaN(Number(newBalance)) ? account.balance : newBalance as number
-        account.type = newType || account.type
-    } 
-    
+    console.log(accountFound)
+
+    if (accountFound) {
+        accountFound.id = newId || accountFound.id
+        accountFound.ownerName = newOwnerName || accountFound.ownerName
+        accountFound.balance = isNaN(Number(newBalance)) ? accountFound.balance : newBalance as number
+        accountFound.type = newType || accountFound.type
+    }
+
     res.status(200).send("Atualização realizada com sucesso!")
 })

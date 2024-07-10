@@ -1,0 +1,9 @@
+
+GET http://localhost:3003/accounts
+### 
+
+GET http://localhost:3003/accounts/a001
+###
+
+DELETE http://localhost:3003/accounts/a001
+###
