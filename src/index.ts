@@ -33,26 +33,25 @@ app.get("/accounts/:id", (req: Request, res: Response) => {
 app.delete("/accounts/:id", (req: Request, res: Response) => {
     const idToDelete = req.params.id
 
-    const accountIndex = accounts.findIndex((account) => {
-        account.id === idToDelete
-    })
+    const accountIndex = accounts.findIndex((account) => account.id === idToDelete)
 
-    accountIndex < 0 ? res.status(404).send("Conta não encontrada") : accounts.splice(accountIndex, 1) && res.status(200).send("Item deletado com sucesso!")
+    accountIndex < 0 ? res.status(404).send("Conta não encontrada") : accounts.splice(accountIndex, 1)
+    
+    res.status(200).send("Item deletado com sucesso!")
 })
 
+// Busca por ID para fazer a atualização de algum dos campos.
 app.put("/accounts/:id", (req: Request, res: Response) => {
     const { id } = req.params;
 
     const newId = req.body.id as string | undefined
-    const newOwnerName = req.body.name as string | undefined
+    const newOwnerName = req.body.ownerName as string | undefined
     const newBalance = req.body.balance as number | undefined
     const newType = req.body.type as ACCOUNT_TYPE | undefined
 
     const accountFound = accounts.find((account) => {
         return account.id === id
     })
-
-    console.log(accountFound)
 
     if (accountFound) {
         accountFound.id = newId || accountFound.id
